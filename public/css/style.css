@@ -4,3 +4,59 @@ body {
 
 a {
   color: #00B7FF; }
+
+.loader {
+  background-image: url(../img/radio.gif);
+  background-size: cover;
+  width: 16px;
+  height: 16px;
+  display: inline-block; }
+
+.loader-block {
+  background: #eee;
+  width: auto;
+  height: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 998;
+  position: absolute;
+  opacity: .5;
+  font-weight: bold;
+  font-size: 36px;
+  text-align: center; }
+
+.hidden {
+  display: none; }
+
+.company-app {
+  position: relative; }
+
+.search-component {
+  position: relative; }
+  .search-component .search-input-container input {
+    padding: 7px;
+    border: 1px solid #eee; }
+  .search-component .search-input-container .loader {
+    margin-left: -25px;
+    margin-top: 2px; }
+  .search-component .search-results {
+    position: absolute;
+    background-color: #fff;
+    z-index: 999; }
+    .search-component .search-results ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      max-width: 320px;
+      border: 1px solid #ddd; }
+      .search-component .search-results ul a {
+        padding: 7px;
+        display: block;
+        border-bottom: 1px solid #ddd; }
+      .search-component .search-results ul li:last-child a {
+        border-bottom: 0 none; }
+      .search-component .search-results ul a:hover {
+        background-color: #00B7FF;
+        color: #fff; }

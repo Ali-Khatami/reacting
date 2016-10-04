@@ -2,6 +2,9 @@ var gulp = require('gulp'),
   nodemon = require('gulp-nodemon'),
   plumber = require('gulp-plumber'),
   livereload = require('gulp-livereload'),
+  babel = require("gulp-babel"),
+  webpack = require("webpack-stream"),
+  named = require("vinyl-named"),
   sass = require('gulp-ruby-sass');
 
 gulp.task('sass', function () {
@@ -10,8 +13,15 @@ gulp.task('sass', function () {
     .pipe(livereload());
 });
 
+gulp.task('scripts', function () {
+  return gulp.src('./public/js/**/*.*')
+    .pipe(babel())
+    .pipe(gulp.dest('./public/dist/js'));
+});
+
 gulp.task('watch', function() {
   gulp.watch('./public/css/*.scss', ['sass']);
+  gulp.watch('./public/js/**/*.*', ['scripts']);
 });
 
 gulp.task('develop', function () {
@@ -34,5 +44,6 @@ gulp.task('develop', function () {
 gulp.task('default', [
   'sass',
   'develop',
+  'scripts',
   'watch'
 ]);

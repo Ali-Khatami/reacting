@@ -1,0 +1,1 @@
+ReactDOM.render(React.createElement(SearchableCompanyComponent, { ticker: "INFO" }), document.body);
