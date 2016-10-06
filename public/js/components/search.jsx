@@ -3,7 +3,6 @@ var SearchRow = React.createClass({
         selectCallback: React.PropTypes.function
     },
     selectCompany: function(event){
-        console.log("Select Company: ", event.target);
         this.props.selectCallback($(event.target).data("ticker"));
     },
     render: function(){
@@ -33,8 +32,6 @@ var Search = React.createClass({
         };
     },
     componentDidMount: function() {
-        console.log(this);
-
         if(this.props.searchValue)
         {
             this.SearchRequest = this.getResults(this.props.searchValue || "AAPL")
@@ -64,7 +61,7 @@ var Search = React.createClass({
             this.state.cache[search] = data;
             this.setState({results: data});
         }).fail(()=>{
-            console.log(arguments);
+            console.log("An error occured retrieving quote data...");
         });
     },
     handleBlur: function(event){
@@ -119,7 +116,7 @@ var Search = React.createClass({
         return (
             <div className="search-component">
                 <div className="search-input-container">
-                    <input type="search" onBlur={this.handleBlur} onChange={this.handleChange} />
+                    <input type="search" onBlur={this.handleBlur} onChange={this.handleChange} placeholder="Enter ticker or name..." />
                     <span className={'loader ' + (!this.state || !this.state.loading ? "hidden" : "")}></span>
                 </div>
                 {resultsBlock}

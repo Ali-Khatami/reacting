@@ -4,26 +4,25 @@ var SearchableCompanyComponent = React.createClass({
     propTypes: {
         ticker: React.PropTypes.string
     },
+    getInitialState: function () {
+        return { ticker: this.props.ticker || "AAPL" };
+    },
     componentDidMount: function () {
-        // anything to do here?
+        this.setState({ ticker: this.props.ticker || "AAPL" });
     },
     componentWillUnmount: function () {
         // maybe I'll need something later
     },
     changeSymbol: function (ticker) {
-        console.log("callback called", ticker);
-        this.props.ticker = ticker;
-        // we need to re-render now that we have a new ticker
-        this.forceUpdate();
+        // setState will trigger a re-render
+        this.setState({ ticker: ticker });
     },
     render: function () {
-        console.log(this.props.ticker);
-
         return React.createElement(
             "div",
-            { className: "company-component", "data-ticker": this.props.ticker },
+            { className: "company-component", "data-ticker": this.state.ticker },
             React.createElement(Search, { selectCallback: this.changeSymbol }),
-            React.createElement(CompanyQuote, { ticker: this.props.ticker })
+            React.createElement(CompanyQuote, { ticker: this.state.ticker })
         );
     }
 });

@@ -4,6 +4,12 @@ var CompanyQuote = React.createClass({
     propTypes: {
         ticker: React.PropTypes.string
     },
+    getInitialState: function () {
+        return {
+            loading: true,
+            quoteData: {}
+        };
+    },
     componentDidMount: function () {
         this.getData(this.props.ticker || "AAPL");
     },
@@ -14,7 +20,6 @@ var CompanyQuote = React.createClass({
         } catch (e) {}
     },
     componentWillReceiveProps: function (newProps) {
-
         if (newProps && newProps.ticker) {
             this.getData(newProps.ticker);
         }
@@ -25,7 +30,7 @@ var CompanyQuote = React.createClass({
             this.QuoteRequest.abort();
         } catch (e) {}
 
-        this.setState({ loading: true });
+        this.setState({ loading: true, quoteData: {} });
 
         this.QuoteRequest = $.ajax({
             url: `http://dev.markitondemand.com/MODApis/Api/v2/Quote/jsonp`,
@@ -35,15 +40,11 @@ var CompanyQuote = React.createClass({
                 symbol: ticker
             }
         }).always(data => {
-            setTimeout(() => {
-                this.setState({ loading: false });
-            }, 2000);
+            this.setState({ loading: false });
         }).done(data => {
-            setTimeout(() => {
-                this.setState({ quoteData: data });
-            }, 2000);
+            this.setState({ quoteData: data });
         }).fail(() => {
-            console.log(arguments);
+            console.log('Failed to get quote data');
         });
 
         return this.QuoteRequest;
@@ -57,13 +58,7 @@ var CompanyQuote = React.createClass({
                 { className: 'loader loader-block ' + (!this.state || !this.state.loading ? "hidden" : "") },
                 'Getting Quote...'
             ),
-            !this.state || !this.state.quoteData || !this.state.quoteData.Name ? React.createElement(
-                'p',
-                null,
-                'Loading data for ',
-                this.props.ticker,
-                ' please wait...'
-            ) : React.createElement(
+            React.createElement(
                 'div',
                 { className: 'app-content' },
                 React.createElement(
@@ -82,16 +77,104 @@ var CompanyQuote = React.createClass({
                         null,
                         React.createElement(
                             'tr',
+                            { className: 'key-values' },
+                            React.createElement(
+                                'td',
+                                { role: 'presentation' },
+                                numeral(this.state.quoteData.LastPrice).format('$0,0.00')
+                            ),
+                            React.createElement(
+                                'td',
+                                { role: 'presentation' },
+                                numeral(this.state.quoteData.Change).format('0,0.00'),
+                                ' (',
+                                numeral(this.state.quoteData.ChangePercent).format('0,0.00'),
+                                '%)'
+                            )
+                        ),
+                        React.createElement(
+                            'tr',
                             null,
                             React.createElement(
                                 'th',
-                                null,
-                                'Last Price'
+                                { scope: 'row' },
+                                'Open'
                             ),
                             React.createElement(
                                 'td',
                                 null,
-                                this.state.quoteData.LastPrice
+                                numeral(this.state.quoteData.Open).format('$0,0.00')
+                            )
+                        ),
+                        React.createElement(
+                            'tr',
+                            null,
+                            React.createElement(
+                                'th',
+                                { scope: 'row' },
+                                'Range'
+                            ),
+                            React.createElement(
+                                'td',
+                                null,
+                                numeral(this.state.quoteData.Low).format('$0,0.00'),
+                                ' - ',
+                                numeral(this.state.quoteData.High).format('$0,0.00')
+                            )
+                        ),
+                        React.createElement(
+                            'tr',
+                            null,
+                            React.createElement(
+                                'th',
+                                { scope: 'row' },
+                                'Change YTD'
+                            ),
+                            React.createElement(
+                                'td',
+                                null,
+                                numeral(this.state.quoteData.ChangeYTD).format('0,0.00'),
+                                ' (',
+                                numeral(this.state.quoteData.ChangePercentYTD).format('0,0.00'),
+                                '%)'
+                            )
+                        ),
+                        React.createElement(
+                            'tr',
+                            null,
+                            React.createElement(
+                                'th',
+                                { scope: 'row' },
+                                'Market Cap'
+                            ),
+                            React.createElement(
+                                'td',
+                                null,
+                                numeral(this.state.quoteData.MarketCap).format('0.0a')
+                            )
+                        ),
+                        React.createElement(
+                            'tr',
+                            null,
+                            React.createElement(
+                                'th',
+                                { scope: 'row' },
+                                'Volume'
+                            ),
+                            React.createElement(
+                                'td',
+                                null,
+                                numeral(this.state.quoteData.Volume).format('0.0a')
+                            )
+                        ),
+                        React.createElement(
+                            'tr',
+                            null,
+                            React.createElement(
+                                'td',
+                                { colSpan: '2' },
+                                'Data as of ',
+                                this.state.quoteData.Timestamp
                             )
                         )
                     )
