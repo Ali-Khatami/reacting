@@ -5,5 +5,11 @@
     "**/.*",
     "node_modules",
     "components"
-  ]
+  ],
+  "dependencies": {
+    "numeral": "^1.5.3",
+    "bootstrap": "^3.3.7",
+    "babel": "^5.8.38",
+    "react": "^15.3.2"
+  }
 }
